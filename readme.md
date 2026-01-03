@@ -80,12 +80,12 @@ File ini tidak berisi logika bisnis, hanya mengatur bagaimana aplikasi dijalanka
 
 Pemisahan kode dilakukan agar setiap file memiliki satu tanggung jawab utama:
 
-- Perubahan endpoint API → `api.py`
-- Perubahan struktur data → `models.py`
-- Perubahan alur aplikasi → `rag.py`
-- Perubahan metode embedding → `embeddings.py`
-- Perubahan penyimpanan data → `store.py`
-- Perubahan konfigurasi aplikasi → `main.py`
+- Endpoint API → `api.py`
+- Struktur data → `models.py`
+- Alur aplikasi → `rag.py`
+- Metode embedding → `embeddings.py`
+- Penyimpanan data → `store.py`
+- Konfigurasi aplikasi → `main.py`
 
 Dengan pendekatan ini, perubahan pada satu bagian tidak memengaruhi bagian lain.
 
@@ -97,5 +97,6 @@ Refactor ini bertujuan untuk membuat kode:
 - Lebih mudah dibaca dan dipahami
 - Lebih terstruktur
 - Lebih siap untuk dikembangkan
+
 
 Struktur dibuat sederhana dan proporsional dengan kebutuhan exercise, tanpa menambahkan fitur baru atau kompleksitas yang tidak diperlukan.

@@ -1,102 +1,62 @@
-## 🏗️ Gambaran Umum Arsitektur
+# RAG Service Refactor
 
-Kode pada proyek ini telah direfaktor agar lebih rapi dan mudah dipahami, dengan memisahkan tanggung jawab tiap bagian kode ke dalam file yang berbeda.
+This repository contains a refactored version of a simple Retrieval-Augmented Generation (RAG) service provided as part of a code quality exercise.
 
-Walaupun struktur proyek dibuat sederhana (tanpa banyak folder), setiap file memiliki peran yang jelas. Pemisahan ini bertujuan agar kode:
-- Lebih mudah dibaca
-- Lebih mudah dirawat
-- Lebih mudah dikembangkan ke depannya
-
-Pendekatan ini dipilih agar tetap sesuai dengan skala aplikasi dan tidak berlebihan untuk exercise ini.
+The original implementation was intentionally written in a single file with minimal structure.  
+The goal of this refactor is **not to add new features**, but to improve code organization, readability, and maintainability while **preserving the original behavior**.
 
 ---
 
-## 📄 Penjelasan Tiap File
+## Architecture Overview
 
-Walaupun hanya terdiri dari beberapa file `.py`, masing-masing file memiliki tanggung jawab yang berbeda.
+The codebase is refactored by separating responsibilities into different Python files while keeping the overall structure simple and flat.  
+Each file has a clear role, which helps make the code easier to read, maintain, and extend in the future.
 
-### `api.py` — Endpoint API
-
-File ini berisi:
-- Definisi endpoint FastAPI
-- Penanganan request dan response
-- Validasi input dari user
-
-File ini hanya mengurus komunikasi HTTP dan tidak berisi logika utama aplikasi.
+This approach is intentionally lightweight and proportional to the scope of the exercise, avoiding unnecessary complexity.
 
 ---
 
-### `models.py` — Model Data
+## File Responsibilities
 
-File ini berisi model Pydantic yang digunakan untuk:
-- Validasi data input
-- Menentukan struktur data request dan response
+Although the project consists of only a few `.py` files, each file has a distinct responsibility:
 
-Dengan memisahkan model data, struktur input menjadi lebih jelas dan mudah diubah jika dibutuhkan.
+- **`api.py`**  
+  Handles FastAPI endpoints, HTTP request/response handling, and user input validation.  
+  This file focuses only on API communication.
 
----
+- **`models.py`**  
+  Defines Pydantic models used for input validation and request/response data structures.
 
-### `rag.py` — Alur Logika Aplikasi
+- **`rag.py`**  
+  Contains the main RAG application logic, including document retrieval, answer generation, and workflow orchestration using LangGraph.
 
-File ini berisi logika utama aplikasi RAG:
-- Menjalankan proses pencarian data (retrieve)
-- Menghasilkan jawaban (answer)
-- Mengatur alur kerja menggunakan LangGraph
+- **`embeddings.py`**  
+  Provides a service for converting text into embedding vectors, allowing the embedding implementation to be replaced easily in the future.
 
-File ini fokus pada alur aplikasi dan tidak bergantung langsung pada FastAPI atau database tertentu.
+- **`store.py`**  
+  Manages document storage and retrieval, using Qdrant when available and falling back to in-memory storage otherwise.
 
----
-
-### `embeddings.py` — Embedding Service
-
-File ini bertugas mengubah teks menjadi vektor embedding.
-
-Pemisahan ini membuat kode lebih fleksibel, sehingga metode embedding dapat diganti di kemudian hari tanpa mengubah bagian lain dari aplikasi.
+- **`main.py`**  
+  Acts as the application entry point by initializing components, wiring dependencies, and starting the FastAPI app.
 
 ---
 
-### `store.py` — Penyimpanan Data
+## Reason for Separation
 
-File ini mengatur cara menyimpan dan mengambil dokumen:
-- Menggunakan Qdrant jika tersedia
-- Menggunakan penyimpanan in-memory sebagai fallback
+Each file is separated so it has a single main responsibility:
 
-Dengan cara ini, aplikasi tetap bisa berjalan walaupun database eksternal tidak tersedia.
+- API logic → `api.py`  
+- Data structure and validation → `models.py`  
+- Application flow → `rag.py`  
+- Embedding method → `embeddings.py`  
+- Data storage → `store.py`  
+- Application configuration and wiring → `main.py`
 
----
-
-### `main.py` — Inisialisasi Aplikasi
-
-File ini adalah titik awal aplikasi:
-- Menginisialisasi semua komponen
-- Menghubungkan antar bagian aplikasi
-- Menjalankan FastAPI
-
-File ini tidak berisi logika bisnis, hanya mengatur bagaimana aplikasi dijalankan.
+With this separation, changes in one part of the code do not affect other parts.
 
 ---
 
-## 🎯 Alasan Pemisahan Kode
+## Conclusion
 
-Pemisahan kode dilakukan agar setiap file memiliki satu tanggung jawab utama:
-
-- Endpoint API → `api.py`
-- Struktur data → `models.py`
-- Alur aplikasi → `rag.py`
-- Metode embedding → `embeddings.py`
-- Penyimpanan data → `store.py`
-- Konfigurasi aplikasi → `main.py`
-
-Dengan pendekatan ini, perubahan pada satu bagian tidak memengaruhi bagian lain.
-
----
-
-## ✅ Kesimpulan
-
-Refactor ini bertujuan untuk membuat kode:
-- Lebih mudah dibaca dan dipahami
-- Lebih terstruktur
-- Lebih siap untuk dikembangkan
-
-
-Struktur dibuat sederhana dan proporsional dengan kebutuhan exercise, tanpa menambahkan fitur baru atau kompleksitas yang tidak diperlukan.
+This refactor focuses on improving internal code quality while keeping the external behavior unchanged.  
+The structure is intentionally kept simple, readable, and suitable for the scope of the exercise, without adding new features or unnecessary abstractions.
